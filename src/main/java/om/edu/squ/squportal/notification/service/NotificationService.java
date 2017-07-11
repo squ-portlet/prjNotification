@@ -60,7 +60,10 @@ public interface NotificationService
 				String	message,
 				String	locale,
 				String	scheduleDate,
-				String	userName
+				String	sender,
+				String  appName,
+				String  appRef,
+				String  refKey				
 			);
 	
 	/**
@@ -84,6 +87,9 @@ public interface NotificationService
 			String	message,
 			String	locale,
 			String	scheduleDate,
-			String	userName
+			String	sender,
+			String  appName,
+			String  appRef,
+			String  refKey
 		);
 }

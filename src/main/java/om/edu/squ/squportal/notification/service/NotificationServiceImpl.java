@@ -31,7 +31,10 @@ package om.edu.squ.squportal.notification.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import om.edu.squ.squportal.notification.dao.AppNotificationDao;
+import om.edu.squ.squportal.notification.dto.AppNotificationDto;
 import om.edu.squ.squportal.notification.sms.MessageSoap;
 import om.edu.squ.squportal.notification.sms.SendSMS1Soap;
 
@@ -46,6 +49,9 @@ public class NotificationServiceImpl implements NotificationService
 	private	String 	smsUserId;
 	private	String	smsPassword;
 
+	@Autowired
+	AppNotificationDao dao;
+	
 	/**
 	 * Setter method : setSmsUserId
 	 * @param smsUserId the smsUserId to set
@@ -93,7 +99,10 @@ public class NotificationServiceImpl implements NotificationService
 				String	message,
 				String	locale,
 				String	scheduleDate,
-				String	userName
+				String	sender,
+				String  appName,
+				String  appRef,
+				String  refKey
 			)
 	{
 		String	result 	=	null;
@@ -103,7 +112,8 @@ public class NotificationServiceImpl implements NotificationService
 			MessageSoap		messageSoap		=	new MessageSoap();
 			SendSMS1Soap	sendSMS1Soap	=	messageSoap.SendSingleSMS();
 							
-							result			=	sendSMS1Soap.SendSingleSMS(userId, password, mobilePhoneNo, message, locale, scheduleDate, userName);
+							result			=	sendSMS1Soap.SendSingleSMS(userId, password, mobilePhoneNo, message, locale, scheduleDate, sender);
+							addNotification2DB("sms", result, mobilePhoneNo, message, locale, appName, appRef, refKey,"","");
 		}
 		catch(Exception ex)
 		{
@@ -112,6 +122,8 @@ public class NotificationServiceImpl implements NotificationService
 		
 		return result;
 	}
+
+	
 
 	/**
 	 * 
@@ -134,7 +146,10 @@ public class NotificationServiceImpl implements NotificationService
 			String	message,
 			String	locale,
 			String	scheduleDate,
-			String	userName
+			String	sender,
+			String  appName,
+			String  appRef,
+			String  refKey
 		)
 	{
 		String	result 	=	null;
@@ -144,7 +159,8 @@ public class NotificationServiceImpl implements NotificationService
 			MessageSoap		messageSoap		=	new MessageSoap();
 			SendSMS1Soap	sendSMS1Soap	=	messageSoap.SendSingleSMS();
 							
-							result			=	sendSMS1Soap.SendSingleSMS(this.smsUserId, this.smsPassword, mobilePhoneNo, message, locale, scheduleDate, userName);
+							result			=	sendSMS1Soap.SendSingleSMS(this.smsUserId, this.smsPassword, mobilePhoneNo, message, locale, scheduleDate, sender);
+							addNotification2DB("sms", result, mobilePhoneNo, message, locale, appName, appRef, refKey,"","");
 		}
 		catch(Exception ex)
 		{
@@ -153,6 +169,26 @@ public class NotificationServiceImpl implements NotificationService
 		}
 		
 		return result;
+	}
+	
+	private void addNotification2DB(String medium, String response,
+			String toAddress, String msgText, String lang,
+			String appName, String appRef, String refKey, String comments,
+			String msgSubject)
+	{
+		AppNotificationDto dto = new AppNotificationDto();
+		dto.setMedium(medium);
+		dto.setResponse(response);
+		dto.setToAddress(toAddress);
+		dto.setMsg_text(msgText);
+		dto.setLang(lang);
+		dto.setAppName(appName);
+		dto.setAppRef(appRef);
+		dto.setRefKey(refKey);
+		dto.setComments(comments);
+		dto.setMsg_subject(msgSubject);
+		
+		dao.insert(dto);		
 	}
 	
 }
