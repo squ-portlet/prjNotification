@@ -29,28 +29,33 @@
  */
 package om.edu.squ.squportal.notification.service;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Bhabesh
+ * The Interface NotificationService.
  *
+ * @author Bhabesh
  */
 public interface NotificationService
 {
+	
 	/**
-	 * 
-	 * method name  : sendSingleSMS
-	 * @param userId
-	 * @param password
-	 * @param mobilePhoneNo
-	 * @param message
-	 * @param locale
-	 * @param scheduleDate
-	 * @param userName
-	 * @return
-	 * NotificationServiceImpl
+	 * method name  : sendSingleSMS.
+	 *
+	 * @param userId the user id
+	 * @param password the password
+	 * @param mobilePhoneNo the mobile phone no
+	 * @param message the message
+	 * @param locale the locale
+	 * @param scheduleDate the schedule date
+	 * @param sender the sender
+	 * @param appName (project name)
+	 * @param appRef (project feature,module etc)
+	 * @param refKey (PK, if any)
+	 * @return NotificationServiceImpl
 	 * return type  : String
 	 * 
 	 * purpose		: 
-	 *
+	 * 
 	 * Date    		:	Apr 6, 2017 12:47:48 PM
 	 */
 	public String	sendSingleSMS(
@@ -67,19 +72,21 @@ public interface NotificationService
 			);
 	
 	/**
-	 * 
-	 * method name  : sendSingleSMS
-	 * @param mobilePhoneNo
-	 * @param message
-	 * @param locale
-	 * @param scheduleDate
-	 * @param userName
-	 * @return
-	 * NotificationServiceImpl
+	 * method name  : sendSingleSMS.
+	 *
+	 * @param mobilePhoneNo the mobile phone no
+	 * @param message the message
+	 * @param locale the locale
+	 * @param scheduleDate the schedule date
+	 * @param sender the sender
+	 * @param appName (project name)
+	 * @param appRef (project feature,module etc)
+	 * @param refKey (PK, if any)
+	 * @return NotificationServiceImpl
 	 * return type  : String
 	 * 
 	 * purpose		:
-	 *
+	 * 
 	 * Date    		:	Apr 6, 2017 1:10:48 PM
 	 */
 	public String	sendSingleSMS(
@@ -92,4 +99,22 @@ public interface NotificationService
 			String  appRef,
 			String  refKey
 		);
+	
+	
+	
+	/**
+	 * Send email. send email notification and log in database
+	 *
+	 * @param fromAddress the from address
+	 * @param toAddress the to address
+	 * @param lang the lang
+	 * @param subject the subject
+	 * @param body the body
+	 * @param appName (project name)
+	 * @param appRef (project feature,module etc)
+	 * @param refKey (PK, if any)
+	 * @return true, if successful
+	 */
+	public boolean sendEmail(String fromAddress, String[] toAddress, String lang, String subject, String body, String appName, String appRef, String refKey);
+	
 }
