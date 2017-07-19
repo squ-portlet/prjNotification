@@ -39,6 +39,61 @@ public interface NotificationService
 {
 	
 	/**
+	 * 
+	 * method name  : sendSingleSMS
+	 * @param userId
+	 * @param password
+	 * @param mobilePhoneNo
+	 * @param message
+	 * @param locale
+	 * @param scheduleDate
+	 * @param userName
+	 * @return
+	 * NotificationServiceImpl
+	 * return type  : String
+	 * 
+	 * purpose		: 
+	 *
+	 * Date    		:	Apr 6, 2017 12:47:48 PM
+	 */
+	public String	sendSingleSMS(
+				String	userId,
+				String	password,
+				String	mobilePhoneNo,
+				String	message,
+				String	locale,
+				String	scheduleDate,
+				String	userName
+			);
+	
+	/**
+	 * 
+	 * method name  : sendSingleSMS
+	 * @param mobilePhoneNo
+	 * @param message
+	 * @param locale
+	 * @param scheduleDate
+	 * @param userName
+	 * @return
+	 * NotificationServiceImpl
+	 * return type  : String
+	 * 
+	 * purpose		:
+	 *
+	 * Date    		:	Apr 6, 2017 1:10:48 PM
+	 */
+	public String	sendSingleSMS(
+			String	mobilePhoneNo,
+			String	message,
+			String	locale,
+			String	scheduleDate,
+			String	userName
+		);
+	
+	
+	
+	
+	/**
 	 * method name  : sendSingleSMS.
 	 *
 	 * @param userId the user id

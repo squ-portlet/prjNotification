@@ -115,6 +115,94 @@ public class NotificationServiceImpl implements NotificationService
 	{
 		this.smsPassword = smsPassword;
 	}
+
+	/**
+	 * 
+	 * method name  : sendSingleSMS
+	 * @param smsUserId
+	 * @param smsPassword
+	 * @param mobilePhoneNo
+	 * @param message
+	 * @param locale
+	 * @param scheduleDate
+	 * @param userName
+	 * @return
+	 * NotificationServiceImpl
+	 * return type  : String
+	 * 
+	 * purpose		: 
+	 *
+	 * Date    		:	Apr 6, 2017 12:47:48 PM
+	 */
+	public String	sendSingleSMS(
+				String	userId,
+				String	password,
+				String	mobilePhoneNo,
+				String	message,
+				String	locale,
+				String	scheduleDate,
+				String	userName
+			)
+	{
+		String	result 	=	null;
+		
+		try
+		{
+			MessageSoap		messageSoap		=	new MessageSoap();
+			SendSMS1Soap	sendSMS1Soap	=	messageSoap.SendSingleSMS();
+							
+							result			=	sendSMS1Soap.SendSingleSMS(userId, password, mobilePhoneNo, message, locale, scheduleDate, userName);
+		}
+		catch(Exception ex)
+		{
+			logger.error("Message sending failure : "+ex.getMessage());
+		}
+		
+		return result;
+	}
+
+	/**
+	 * 
+	 * method name  : sendSingleSMS
+	 * @param mobilePhoneNo
+	 * @param message
+	 * @param locale
+	 * @param scheduleDate
+	 * @param userName
+	 * @return
+	 * NotificationServiceImpl
+	 * return type  : String
+	 * 
+	 * purpose		:
+	 *
+	 * Date    		:	Apr 6, 2017 1:10:48 PM
+	 */
+	public String	sendSingleSMS(
+			String	mobilePhoneNo,
+			String	message,
+			String	locale,
+			String	scheduleDate,
+			String	userName
+		)
+	{
+		String	result 	=	null;
+		
+		try
+		{
+			MessageSoap		messageSoap		=	new MessageSoap();
+			SendSMS1Soap	sendSMS1Soap	=	messageSoap.SendSingleSMS();
+							
+							result			=	sendSMS1Soap.SendSingleSMS(this.smsUserId, this.smsPassword, mobilePhoneNo, message, locale, scheduleDate, userName);
+		}
+		catch(Exception ex)
+		{
+			logger.error("Message sending failure : "+ex.getMessage());
+			ex.printStackTrace();
+		}
+		
+		return result;
+	}
+	
 	
 	/**
 	 * method name : sendSingleSMS.
