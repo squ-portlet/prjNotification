@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -16,6 +17,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
 @PropertySource("classpath:mail.properties")
+@ComponentScan(basePackages = {"om.edu.squ.squportal.notification.dao"})
 public class AppConfig
 {
 	@Bean(destroyMethod = "")
