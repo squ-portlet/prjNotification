@@ -55,4 +55,7 @@ public interface Constants
 	public static final	String	CONST_SMS_WS_PARAM_NAME_LANGUAGE					=	"Language";
 	public static final	String	CONST_SMS_WS_PARAM_NAME_SCH_DATE					=	"SchDate";
 	public static final	String	CONST_SMS_WS_PARAM_NAME_SENDER						=	"Sender";
+	
+	/************* PROPERTY FILE ******************************/
+	public	static	String	RESOURCE_PROPERTY_FILE_MAIL								=	"mail";
 }
