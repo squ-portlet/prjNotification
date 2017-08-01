@@ -348,7 +348,7 @@ public class NotificationServiceImpl implements NotificationService
 		
 		try
 		{
-			boolean result = sendMail(fromAddress,toAddress,null,subject,body,null);
+			boolean result = sendEMail(fromAddress,toAddress,null,subject,body,null);
 			addNotification2DB("email", Boolean.toString(result),
 					StringUtils.arrayToCommaDelimitedString(toAddress), body,
 					lang, appName, appRef, refKey, "", subject);
@@ -377,7 +377,7 @@ public class NotificationServiceImpl implements NotificationService
 	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
-	public boolean sendMail(String fromAddress, String[] toAddress,
+	public boolean sendEMail(String fromAddress, String[] toAddress,
 			String[] ccAddress, String txtMailSubject, String txtMailBody,
 			MultipartFile multipartFile) throws Exception
 	{

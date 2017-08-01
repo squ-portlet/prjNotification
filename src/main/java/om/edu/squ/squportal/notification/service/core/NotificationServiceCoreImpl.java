@@ -29,12 +29,14 @@
  */
 package om.edu.squ.squportal.notification.service.core;
 
+import java.io.IOException;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.mail.Authenticator;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -46,6 +48,11 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
 
+
+
+
+
+import om.edu.squ.squportal.notification.exception.NotificationException;
 import om.edu.squ.squportal.notification.sms.MessageSoap;
 import om.edu.squ.squportal.notification.sms.SendSMS1Soap;
 import om.edu.squ.squportal.notification.utility.UtilProperty;
@@ -54,13 +61,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sun.mail.smtp.SMTPSendFailedException;
+
 /**
  * @author Bhabesh
  *
  */
 public class NotificationServiceCoreImpl implements NotificationServiceCore
 {
-private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private	String 	smsUserId;
 	private	String	smsPassword;
@@ -183,6 +192,7 @@ private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	 * @param txtMailBody
 	 * @param multipartFile
 	 * @return
+	 * @throws MessagingException 
 	 * @throws Exception
 	 * NotificationServiceCoreImpl
 	 * return type  : boolean
@@ -193,7 +203,7 @@ private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	 */
 	public boolean sendEMail(String fromAddress, String[] toAddress,
 			String[] ccAddress, String txtMailSubject, String txtMailBody,
-			MultipartFile multipartFile) throws Exception
+			MultipartFile multipartFile) throws NotificationException
 	{
 
 		String	SMTP_HOST_NAME	= 	UtilProperty.getMailProp("smtpHost", null);
@@ -251,8 +261,16 @@ private final Logger logger = LoggerFactory.getLogger(this.getClass());
 				{
 					// create the second message part
 					MimeBodyPart mbp2 = new MimeBodyPart();
-					DataSource fds = new ByteArrayDataSource(
-							multipartFile.getInputStream(), "application/x-any");
+					DataSource fds;
+					try
+					{
+						fds = new ByteArrayDataSource(
+								multipartFile.getInputStream(), "application/x-any");
+					}
+					catch (IOException e)
+					{
+						throw new NotificationException(e.getMessage());
+					}
 					mbp2.setDataHandler(new DataHandler(fds));
 					mbp2.setFileName(multipartFile.getOriginalFilename());
 					mp.addBodyPart(mbp2);
@@ -285,29 +303,47 @@ private final Logger logger = LoggerFactory.getLogger(this.getClass());
 			message.setFrom(new InternetAddress(SMTP_AUTH_USER));
 			transport.connect();
 			transport.sendMessage(message,
-					message.getRecipients(Message.RecipientType.TO));
-			if (null != ccAddress)
-			{
-				if (ccAddress.length != 0)
+						message.getRecipients(Message.RecipientType.TO));
+				if (null != ccAddress)
 				{
-					transport.sendMessage(message,
-							message.getRecipients(Message.RecipientType.CC));
+					if (ccAddress.length != 0)
+					{
+						transport.sendMessage(message,
+								message.getRecipients(Message.RecipientType.CC));
+					}
 				}
-			}
+				
+				transport.close();
+				mailSuccess = true;
 			
-			transport.close();
-			mailSuccess = true;
 		}
-		catch (Exception ex)
-		{
-			if (transport != null && transport.isConnected())
+			catch(SMTPSendFailedException sendFailedException)
 			{
+				logger.error("Error in sending email : {}",sendFailedException.getMessage());
+				throw new NotificationException(sendFailedException.getMessage());
+				
+			}
+		
+		catch (MessagingException ex)
+		{
+			mailSuccess = false;
+			logger.error("Mail sending failure, Details :{}",ex.getMessage());
+			throw new NotificationException(ex.getMessage());
+		}
+
+		if (transport != null && transport.isConnected())
+		{
+			try
+			{
+				mailSuccess = false;
 				transport.close();
 			}
-			mailSuccess = false;
-			// System.out.println("Mail sending failure, Details : "+ex);
-			//ex.printStackTrace();
-			throw ex;
+			catch (MessagingException e)
+			{
+				mailSuccess = false;
+				
+				throw new NotificationException(e.getMessage());
+			}
 		}
 		
 		return mailSuccess;

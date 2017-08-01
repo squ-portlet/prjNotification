@@ -29,6 +29,8 @@
  */
 package om.edu.squ.squportal.notification.service.core;
 
+import om.edu.squ.squportal.notification.exception.NotificationException;
+
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -109,5 +111,5 @@ public interface NotificationServiceCore
 	 */
 	public boolean sendEMail(String fromAddress, String[] toAddress,
 			String[] ccAddress, String txtMailSubject, String txtMailBody,
-			MultipartFile multipartFile) throws Exception;
+			MultipartFile multipartFile) throws NotificationException;
 }

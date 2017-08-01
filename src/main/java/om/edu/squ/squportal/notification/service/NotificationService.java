@@ -29,6 +29,8 @@
  */
 package om.edu.squ.squportal.notification.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Interface NotificationService.
@@ -171,5 +173,21 @@ public interface NotificationService
 	 * @return true, if successful
 	 */
 	public boolean sendEmail(String fromAddress, String[] toAddress, String lang, String subject, String body, String appName, String appRef, String refKey);
+	
+	/**
+	 * Send mail.
+	 *
+	 * @param fromAddress the from address
+	 * @param toAddress the to address
+	 * @param ccAddress the cc address
+	 * @param txtMailSubject the txt mail subject
+	 * @param txtMailBody the txt mail body
+	 * @param multipartFile the multipart file
+	 * @return true, if successful
+	 * @throws Exception the exception
+	 */
+	public boolean sendEMail(String fromAddress, String[] toAddress,
+			String[] ccAddress, String txtMailSubject, String txtMailBody,
+			MultipartFile multipartFile) throws Exception;
 	
 }
